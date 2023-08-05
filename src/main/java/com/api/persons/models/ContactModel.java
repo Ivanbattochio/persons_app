@@ -1,18 +1,21 @@
 package com.api.persons.models;
 
+import com.api.persons.dtos.CreateContactDTO;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_PERSON")
+@Table(name = "TB_CONTACT")
 @Data
-public class PersonModel implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ContactModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -23,16 +26,14 @@ public class PersonModel implements Serializable {
     @Column(nullable = false, length = 128)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 128)
+    @Column(nullable = false, length = 128)
+    private String phoneNumber;
+
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private Instant birthDate;
-
-    @Column(nullable = false)
-    private String ein;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-    private List<ContactModel> contacts;
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private PersonModel person;
 
 }

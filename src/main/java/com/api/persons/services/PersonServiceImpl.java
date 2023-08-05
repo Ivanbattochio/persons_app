@@ -1,6 +1,8 @@
 package com.api.persons.services;
 
+import com.api.persons.dtos.CreateContactDTO;
 import com.api.persons.dtos.CreatePersonDTO;
+import com.api.persons.models.ContactModel;
 import com.api.persons.models.PersonModel;
 import com.api.persons.repositories.PersonRepository;
 import org.springframework.beans.BeanUtils;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +31,19 @@ public class PersonServiceImpl implements PersonService {
         PersonModel personModel = new PersonModel();
         BeanUtils.copyProperties(person, personModel);
 
+        List<CreateContactDTO> contactDTOList = person.getContacts();
+        List<ContactModel> contactModelList = new ArrayList<>();
+
+        for (CreateContactDTO contactDTO : contactDTOList) {
+            ContactModel contactModel = new ContactModel();
+            contactModel.setEmail(contactDTO.getEmail());
+            contactModel.setName(contactDTO.getName());
+            contactModel.setPhoneNumber(contactDTO.getPhoneNumber());
+            contactModel.setPerson(personModel);
+            contactModelList.add(contactModel);
+        }
+
+        personModel.setContacts(contactModelList);
         return personRepository.save(personModel);
     }
 
