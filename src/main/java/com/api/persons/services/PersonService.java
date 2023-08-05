@@ -2,6 +2,7 @@ package com.api.persons.services;
 
 import com.api.persons.dtos.CreatePersonDTO;
 import com.api.persons.models.PersonModel;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,6 @@ public interface PersonService {
     List<PersonModel> findAll();
 
     PersonModel updatePerson(PersonModel person);
+
+    Page<PersonModel> findPaginated(Integer page, Integer size);
 }
