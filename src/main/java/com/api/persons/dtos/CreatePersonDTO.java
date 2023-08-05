@@ -1,6 +1,5 @@
 package com.api.persons.dtos;
 
-import com.api.persons.models.ContactModel;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,5 @@
 package com.api.persons.models;
 
-import com.api.persons.dtos.CreateContactDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +31,7 @@ public class ContactModel implements Serializable {
     @Column(nullable = false)
     private String email;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "person_id")
     private PersonModel person;
 
