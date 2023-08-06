@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,8 +68,8 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.save(person);
     }
 
-    public Page<PersonModel> findPaginated(Integer page, Integer size) {
-        return personRepository.findAll(PageRequest.of(page, size));
+    public Page<PersonModel> findPaginated(Integer page, Integer size, Sort sort) {
+        return personRepository.findAll(PageRequest.of(page, size).withSort(sort));
     }
 
 }

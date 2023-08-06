@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.Instant;
@@ -88,7 +89,7 @@ public class PersonServiceTest {
 
     @Test
     public void whenGettingPaginatedPersonsGivenAnValidInputShouldReturnArrayOfTwo() {
-        Page<PersonModel> page = personService.findPaginated(0, 20);
+        Page<PersonModel> page = personService.findPaginated(0, 20, Sort.by(Sort.Order.asc("name")));
 
         assertEquals(2, page.getTotalElements(), "page length should be equal to two");
     }

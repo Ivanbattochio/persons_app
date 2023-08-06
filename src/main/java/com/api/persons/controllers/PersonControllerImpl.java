@@ -74,7 +74,7 @@ public class PersonControllerImpl implements PersonController {
     @Override
     public ResponseEntity<Object> findPersonPaginated(@ParameterObject Pageable pageable) {
         log.info("GET /paginated/{id}");
-        Page<PersonModel> personModelPage = personService.findPaginated(pageable.getPageNumber(), pageable.getPageSize());
+        Page<PersonModel> personModelPage = personService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
         return ResponseEntity.status(HttpStatus.OK).body(personModelPage.stream().map(this::convertToView).collect(Collectors.toList()));
     }
