@@ -48,28 +48,39 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.save(personModel);
     }
 
+    @Override
     public boolean existsByEmail(String email) {
         return personRepository.existsByEmail(email);
     }
 
+    @Override
     public Optional<PersonModel> findById(UUID id) {
         return personRepository.findById(id);
     }
 
+    @Override
     public void deletePerson(UUID id) {
         personRepository.deleteById(id);
     }
 
+    @Override
     public List<PersonModel> findAll() {
         return personRepository.findAll();
     }
 
+    @Override
     public PersonModel updatePerson(PersonModel person) {
         return personRepository.save(person);
     }
 
+    @Override
     public Page<PersonModel> findPaginated(Integer page, Integer size, Sort sort) {
         return personRepository.findAll(PageRequest.of(page, size).withSort(sort));
+    }
+
+    @Override
+    public long count() {
+        return personRepository.count();
     }
 
 }

@@ -5,6 +5,7 @@ import com.api.persons.dtos.CreatePersonDTO;
 import com.api.persons.dtos.UpdatePersonDTO;
 import com.api.persons.view.PersonView;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -62,6 +63,7 @@ public interface PersonController {
     @Operation(summary = "Get persons paginated")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
+                    headers = @Header(name = "X-Total-Count", description = "The total number of persons"),
                     description = "Fetch successful",
                     content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PersonView.class)))}),
     })

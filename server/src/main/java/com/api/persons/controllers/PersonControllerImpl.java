@@ -12,6 +12,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,7 +77,12 @@ public class PersonControllerImpl implements PersonController {
         log.info("GET /paginated/{id}");
         Page<PersonModel> personModelPage = personService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
-        return ResponseEntity.status(HttpStatus.OK).body(personModelPage.stream().map(this::convertToView).collect(Collectors.toList()));
+        long documentCount = personService.count();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(documentCount));
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(personModelPage.stream().map(this::convertToView).collect(Collectors.toList()));
     }
 
     @Override

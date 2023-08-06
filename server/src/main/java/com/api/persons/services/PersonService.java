@@ -26,4 +26,6 @@ public interface PersonService {
     PersonModel updatePerson(PersonModel person);
 
     Page<PersonModel> findPaginated(Integer page, Integer size, Sort sort);
+
+    long count();
 }
