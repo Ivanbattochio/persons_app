@@ -52,7 +52,7 @@ public interface PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Fetch successful",
-                    content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PersonView.class)))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PersonView.class))}),
             @ApiResponse(responseCode = "404",
                     description = "Person not found"),
     })
