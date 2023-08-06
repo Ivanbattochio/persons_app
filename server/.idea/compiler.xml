@@ -7,13 +7,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="crud" />
         <module name="persons-crud" />
-        <module name="persons_app" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="persons_app" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="crud" options="-parameters" />
       <module name="persons-crud" options="-parameters" />
       <module name="persons_app" options="-parameters" />
     </option>
