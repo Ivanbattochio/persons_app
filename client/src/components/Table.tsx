@@ -12,11 +12,16 @@ import {
     TableRow,
     Checkbox,
     Typography,
+    IconButton,
+    LinearProgress,
+    Stack,
 } from '@mui/material'
+import { ModeEdit } from '@mui/icons-material'
 import Pagination from '@mui/material/Pagination'
 import RemoveIcon from '@mui/icons-material/Remove'
+import CheckIcon from '@mui/icons-material/Check'
 import { TableProps } from '../models/TableComponent'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 const cardsQtyOptions = [
     { key: '5', value: '5', text: '5' },
     { key: '10', value: '10', text: '10' },
@@ -40,6 +45,13 @@ export const TableComponent: React.FC<TableProps> = ({
     handlePageChange,
     handleSizeChange,
 }) => {
+    const navigate = useNavigate()
+    console.log(loading)
+
+    const handleUpdate = (id: string) => {
+        navigate('/update', { state: { id: id } })
+    }
+
     return (
         <>
             <Box
@@ -53,10 +65,18 @@ export const TableComponent: React.FC<TableProps> = ({
                     justifyContent: 'space-between',
                 }}
             >
-                <Typography sx={{ alignSelf: 'center', color: 'black', padding: '20px' }} variant="h3">
+                <Typography sx={{ alignSelf: 'center', color: 'black', padding: '50px', fontFamily: 'sans-serif' }} variant="h3">
                     Pessoas
                 </Typography>
-                <Box sx={{ display: 'flex', alignSelf: 'center', paddingRight: '20px', gap: '20px' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignSelf: 'center',
+                        paddingRight: '20px',
+                        gap: { xs: '5px', md: '20px' },
+                        flexDirection: { xs: 'column-reverse', md: 'row' },
+                    }}
+                >
                     <Button
                         variant="contained"
                         sx={{
@@ -73,7 +93,20 @@ export const TableComponent: React.FC<TableProps> = ({
                         <RemoveIcon></RemoveIcon>
                         Excluir
                     </Button>
-                    <Button variant="contained" component={Link} to="/insert">
+                    <Button
+                        variant="contained"
+                        sx={{
+                            backgroundColor: '#4CAF50',
+                            '&:hover': {
+                                backgroundColor: '#4CAF50',
+                                color: '#fff',
+                            },
+                            gap: '5px',
+                        }}
+                        component={Link}
+                        to="/insert"
+                    >
+                        <CheckIcon></CheckIcon>
                         Adicionar
                     </Button>
                 </Box>
@@ -82,11 +115,19 @@ export const TableComponent: React.FC<TableProps> = ({
                 <TableContainer component={Paper} style={{ maxHeight: '100%', borderRadius: '0px' }}>
                     <Table aria-label="simple table" stickyHeader>
                         <TableHead>
-                            <TableRow>
+                            <TableRow
+                                sx={{
+                                    '& th': {
+                                        color: 'rgba(96, 96, 96)',
+                                        backgroundColor: '#7EC8E3',
+                                    },
+                                }}
+                            >
                                 <TableCell>Nome</TableCell>
                                 <TableCell align="right">Email</TableCell>
                                 <TableCell align="right">Data de nascimento</TableCell>
                                 <TableCell align="right">CPF</TableCell>
+                                <TableCell align="right"></TableCell>
                                 <TableCell align="right">
                                     <Checkbox
                                         checked={mainCheckBox}
@@ -98,7 +139,6 @@ export const TableComponent: React.FC<TableProps> = ({
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell align="right">Atualizar</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody sx={{ maxHeight: '500px', marginBottom: '150px', borderRadius: '0px' }}>
@@ -117,6 +157,11 @@ export const TableComponent: React.FC<TableProps> = ({
                                     <TableCell align="right">{row.email}</TableCell>
                                     <TableCell align="right">{row.ein}</TableCell>
                                     <TableCell align="right">
+                                        <IconButton onClick={() => handleUpdate(row.id)}>
+                                            <ModeEdit color="info" />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="right">
                                         <Checkbox
                                             checked={row.selected}
                                             onClick={() => {
@@ -130,18 +175,15 @@ export const TableComponent: React.FC<TableProps> = ({
                                             }}
                                         />
                                     </TableCell>
-
-                                    <TableCell align="right">
-                                        <Button variant="outlined" component={Link} to="/update">
-                                            Atualizar
-                                        </Button>
-                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </Box>
+
+            <Stack sx={{ width: '80%' }}>{loading && <LinearProgress color="success" />}</Stack>
+
             <Box
                 className="pagination"
                 display={'flex'}

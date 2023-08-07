@@ -1,4 +1,4 @@
-import { TableComponent } from '../components/Tabel'
+import { TableComponent } from '../components/Table'
 import { InsertPersonProps } from '../models/InsertPersonComponent'
 import { Box } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
