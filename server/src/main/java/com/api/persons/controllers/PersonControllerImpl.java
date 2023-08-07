@@ -74,7 +74,7 @@ public class PersonControllerImpl implements PersonController {
 
     @Override
     public ResponseEntity<Object> findPersonPaginated(@ParameterObject Pageable pageable) {
-        log.info("GET /paginated/{id}");
+        log.info("GET /paginated");
         Page<PersonModel> personModelPage = personService.findPaginated(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
         long documentCount = personService.count();

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "X-Total-Count")
 @RequestMapping("/person")
 @Tag(name = "Persons API")
 public interface PersonController {
