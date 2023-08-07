@@ -1,10 +1,5 @@
 import { PersonRow } from './Person'
 
-export type TableParams = {
-    page: number
-    size: number
-}
-
 export type TableProps = {
     isDeleteButtonActive: boolean
     mainCheckBox: boolean

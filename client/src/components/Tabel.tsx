@@ -15,7 +15,8 @@ import {
 } from '@mui/material'
 import Pagination from '@mui/material/Pagination'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { TableProps } from '../models/Table'
+import { TableProps } from '../models/TableComponent'
+import { Link } from 'react-router-dom'
 const cardsQtyOptions = [
     { key: '5', value: '5', text: '5' },
     { key: '10', value: '10', text: '10' },
@@ -70,9 +71,11 @@ export const TableComponent: React.FC<TableProps> = ({
                         onClick={handleDelete}
                     >
                         <RemoveIcon></RemoveIcon>
-                        Deletar
+                        Excluir
                     </Button>
-                    <Button variant="contained">Adicionar</Button>
+                    <Button variant="contained" component={Link} to="/insert">
+                        Adicionar
+                    </Button>
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '80%', height: '80%' }}>
@@ -95,6 +98,7 @@ export const TableComponent: React.FC<TableProps> = ({
                                         }}
                                     />
                                 </TableCell>
+                                <TableCell align="right">Atualizar</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody sx={{ maxHeight: '500px', marginBottom: '150px', borderRadius: '0px' }}>
@@ -125,6 +129,12 @@ export const TableComponent: React.FC<TableProps> = ({
                                                 setTableData(aux)
                                             }}
                                         />
+                                    </TableCell>
+
+                                    <TableCell align="right">
+                                        <Button variant="outlined" component={Link} to="/update">
+                                            Atualizar
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

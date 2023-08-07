@@ -1,10 +1,10 @@
-import axios from 'axios'
-import { useEffect, useState, useMemo } from 'react'
-import { Person, PersonRow } from './models/Person'
+import { TableComponent } from '../components/Tabel'
+import { InsertPersonProps } from '../models/InsertPersonComponent'
 import { Box } from '@mui/material'
-import { TableComponent } from './components/Tabel'
-
-function App() {
+import { useEffect, useState, useMemo } from 'react'
+import axios from 'axios'
+import { Person, PersonRow } from '../models/Person'
+export const Home: React.FC<InsertPersonProps> = () => {
     const [loading, setLoading] = useState(false)
     const [tableData, setTableData] = useState<PersonRow[]>([])
 
@@ -108,5 +108,3 @@ function App() {
         </Box>
     )
 }
-
-export default App
