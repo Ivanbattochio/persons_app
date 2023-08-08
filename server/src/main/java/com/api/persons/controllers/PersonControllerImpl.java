@@ -46,7 +46,7 @@ public class PersonControllerImpl implements PersonController {
 
     @Override
     public ResponseEntity<Object> deletePerson(@PathVariable(value = "id") UUID id) {
-        log.info("DELETE /person");
+        log.info("DELETE /person/{id}");
         Optional<PersonModel> person = personService.findById(id);
 
         if (person.isEmpty()) {
