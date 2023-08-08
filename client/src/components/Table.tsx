@@ -15,13 +15,14 @@ import {
     IconButton,
     LinearProgress,
     Stack,
+    Link,
 } from '@mui/material'
 import { ModeEdit } from '@mui/icons-material'
 import Pagination from '@mui/material/Pagination'
 import RemoveIcon from '@mui/icons-material/Remove'
 import CheckIcon from '@mui/icons-material/Check'
 import { TableProps } from '../models/TableComponent'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link as RouterDomLink, useNavigate } from 'react-router-dom'
 import { ConfirmModal } from './ConfirmModal'
 import { useState } from 'react'
 
@@ -124,7 +125,7 @@ export const TableComponent: React.FC<TableProps> = ({
                             },
                             gap: '5px',
                         }}
-                        component={Link}
+                        component={RouterDomLink}
                         to="/insert"
                     >
                         <CheckIcon></CheckIcon>
@@ -200,7 +201,6 @@ export const TableComponent: React.FC<TableProps> = ({
             <Stack sx={{ width: '80%' }}>{loading && <LinearProgress color="success" />}</Stack>
 
             <Box
-                className="pagination"
                 display={'flex'}
                 sx={{
                     backgroundColor: '#fff',
@@ -209,35 +209,45 @@ export const TableComponent: React.FC<TableProps> = ({
                     borderBottomRightRadius: '5px',
                     borderBottomLeftRadius: '5px',
                     alignItems: 'center',
-                    flexDirection: 'row-reverse',
                     borderTop: '1px solid',
                     borderColor: '#1C3144',
                 }}
             >
-                <ToggleButtonGroup
-                    value={currentCardQuantity}
-                    exclusive
-                    onChange={(_: React.MouseEvent<HTMLElement>, val: string) => {
-                        handleSizeChange(parseInt(val))
+                <Box
+                    sx={{
+                        width: '250px',
+                        marginLeft: '20px',
+                        backgroundColor: '#fff',
                     }}
-                    sx={{ marginRight: '20px' }}
                 >
-                    {cardsQtyOptions.map(({ key, value }) => (
-                        <ToggleButton disabled={loading} value={value} key={key} name={value} onChange={(_, val) => handleSizeChange(val)}>
-                            {value}
-                        </ToggleButton>
-                    ))}
-                </ToggleButtonGroup>
+                    <Link href="http://localhost:8080/swagger-ui/index.html">Documentação da API</Link>
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%', marginRight: '20px', alignItems: 'center' }}>
+                    <Pagination
+                        disabled={loading}
+                        shape="rounded"
+                        page={currentPage}
+                        count={Math.ceil(totalQty / currentCardQuantity)}
+                        onChange={(_, page) => {
+                            handlePageChange(page)
+                        }}
+                    />
+                    <ToggleButtonGroup
+                        value={currentCardQuantity}
+                        exclusive
+                        onChange={(_: React.MouseEvent<HTMLElement>, val: string) => {
+                            handleSizeChange(parseInt(val))
+                        }}
+                        sx={{ marginRight: '20px' }}
+                    >
+                        {cardsQtyOptions.map(({ key, value }) => (
+                            <ToggleButton disabled={loading} value={value} key={key} name={value} onChange={(_, val) => handleSizeChange(val)}>
+                                {value}
+                            </ToggleButton>
+                        ))}
+                    </ToggleButtonGroup>
+                </Box>
 
-                <Pagination
-                    disabled={loading}
-                    shape="rounded"
-                    page={currentPage}
-                    count={Math.ceil(totalQty / currentCardQuantity)}
-                    onChange={(_, page) => {
-                        handlePageChange(page)
-                    }}
-                />
                 <ConfirmModal
                     open={openConfirmModal}
                     setOpenConfirmModal={setOpenConfirmModal}
