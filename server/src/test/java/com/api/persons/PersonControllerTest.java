@@ -3,6 +3,7 @@ package com.api.persons;
 
 import com.api.persons.dtos.CreateContactDTO;
 import com.api.persons.dtos.CreatePersonDTO;
+import com.api.persons.dtos.UpdateContactDTO;
 import com.api.persons.dtos.UpdatePersonDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -45,6 +46,7 @@ public class PersonControllerTest {
     @BeforeEach
     public void beforeEach() {
         jdbcTemplate.execute("INSERT INTO tb_person (id, name, email, birth_date, ein) VALUES ('df031153-546a-4d31-a92c-c9d53a88056c', 'John Doe', 'ivan@outlook.com', '1990-01-01', '51326686828')");
+        jdbcTemplate.execute("INSERT INTO tb_contact (id,  email, name, phone_number, person_id) VALUES ('4fc84be1-2752-4d8b-97bb-805edc81a199', 'email@email.com', 'ivan', '14997893788', 'df031153-546a-4d31-a92c-c9d53a88056c')");
         jdbcTemplate.execute("INSERT INTO tb_person (id, name, email, birth_date, ein) VALUES ('df031153-546a-4d31-a92c-c9d53a88456c', 'John Doe', 'ivan123@outlook.com', '1990-01-01', '51326686828')");
     }
 
@@ -126,11 +128,22 @@ public class PersonControllerTest {
     }
 
     @Test
+    @Transactional
     public void updatePersonHttpRequest() throws Exception {
 
         UpdatePersonDTO updatePersonDTO = new UpdatePersonDTO();
         updatePersonDTO.setId(UUID.fromString("df031153-546a-4d31-a92c-c9d53a88056c"));
         updatePersonDTO.setName("ivan-updated");
+
+        List<UpdateContactDTO> updateContactDTOS = new ArrayList<>();
+
+        UpdateContactDTO updateContactDTO = new UpdateContactDTO();
+        updateContactDTO.setName("junior");
+        updateContactDTO.setEmail("junior@hotmail.com");
+        updateContactDTO.setPhoneNumber("14997893788");
+        updateContactDTO.setId(UUID.fromString("4fc84be1-2752-4d8b-97bb-805edc81a199"));
+        updateContactDTOS.add(updateContactDTO);
+        updatePersonDTO.setContacts(updateContactDTOS);
 
         String serializedJsonObject = objectMapper.writeValueAsString(updatePersonDTO);
 
@@ -138,7 +151,8 @@ public class PersonControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(serializedJsonObject))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("ivan-updated")));
+                .andExpect(jsonPath("$.name", is("ivan-updated")))
+                .andExpect(jsonPath("$.contacts[0].name", is("junior")));
     }
 
     @Test
@@ -147,6 +161,7 @@ public class PersonControllerTest {
         UpdatePersonDTO updatePersonDTO = new UpdatePersonDTO();
         updatePersonDTO.setId(UUID.fromString("df031153-546a-4d31-a92c-c9d53a88056c"));
         updatePersonDTO.setEmail("invalidEmail");
+
 
         String serializedJsonObject = objectMapper.writeValueAsString(updatePersonDTO);
 

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -122,6 +123,7 @@ public class PersonServiceTest {
     }
 
     @Test
+    @Transactional
     public void whenUpdatingPersonsGivenAnValidInputShouldReturnUpdatedPersonFields() {
         PersonModel personModel = personService.findById(UUID.fromString("df031153-546a-4d31-a92c-c9d53a88056c")).orElse(null);
 
