@@ -1,7 +1,8 @@
 package com.api.persons.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,7 +12,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TB_PERSON")
-@Data
+@Getter
+@Setter
 public class PersonModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

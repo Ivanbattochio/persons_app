@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
+@TestPropertySource("/application-unit-test.properties")
 public class PersonServiceTest {
 
     @Autowired
