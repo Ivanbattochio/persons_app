@@ -12,12 +12,11 @@ type DateInputProps = {
 }
 
 export const FormDateInput: React.FC<DateInputProps> = ({ value, labelText, handleChange }) => {
-
     return (
         <Box>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DemoContainer components={['DatePicker']}>
-                    <DatePicker sx={{ width: '241px' }} label={labelText} value={value} onChange={handleChange} />
+                    <DatePicker disableFuture sx={{ width: '241px' }} label={labelText} value={value} onChange={handleChange} />
                 </DemoContainer>
             </LocalizationProvider>
         </Box>
