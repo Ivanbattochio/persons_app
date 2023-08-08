@@ -46,7 +46,6 @@ export const TableComponent: React.FC<TableProps> = ({
     handleSizeChange,
 }) => {
     const navigate = useNavigate()
-    console.log(loading)
 
     const handleUpdate = (id: string) => {
         navigate('/update', { state: { id: id } })
@@ -143,13 +142,7 @@ export const TableComponent: React.FC<TableProps> = ({
                         </TableHead>
                         <TableBody sx={{ maxHeight: '500px', marginBottom: '150px', borderRadius: '0px' }}>
                             {tableData.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    onClick={() => {
-                                        console.log(row.id)
-                                    }}
-                                >
+                                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell component="th" scope="row">
                                         {row.name}
                                     </TableCell>

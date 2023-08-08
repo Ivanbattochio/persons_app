@@ -1,13 +1,14 @@
 import { Key, useEffect, useState } from 'react'
 import { Path, useLocation, useNavigate } from 'react-router-dom'
-import { Box, Button, IconButton, Typography } from '@mui/material'
+import { Alert, Box, Button, IconButton, Snackbar, Typography } from '@mui/material'
 import RemoveIcon from '@mui/icons-material/Remove'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckIcon from '@mui/icons-material/Check'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Person } from '../models/Person'
-import { PersonErrorsObject } from '../models/ErrorsObject'
+import { BadRequestResponse, PersonErrorsObject } from '../models/ErrorsObject'
 import { UpdatePersonForm } from '../components/UpdatePersonForm'
+import { ConfirmModal } from '../components/ConfirmModal'
 
 interface Location extends Path {
     state: { id: string }
@@ -20,6 +21,12 @@ export const Update: React.FC = () => {
 
     const locationProps = location()
     const personId = locationProps.state.id
+
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
+
+    const [notificationOpen, notificationOpenSet] = useState<boolean>(false)
+    const [alertMessage, alertMessageSet] = useState<string>('')
+    const [alertType, alertTypeSet] = useState<'warning' | 'info' | 'success' | 'error'>('info')
 
     const [person, setPerson] = useState<Person>({
         id: '',
@@ -38,20 +45,45 @@ export const Update: React.FC = () => {
         contacts: false,
     })
 
-    const [loading, setLoading] = useState<boolean>(false)
-
     useEffect(() => {
         if (!personId) navigate('/')
 
-        setLoading(true)
-        axios
-            .get<Person>(`http://localhost:8080/person/${personId}`)
-            .then((res) => {
-                setPerson({ ...res.data, birthDate: new Date(res.data.birthDate) })
-                console.log(res.data)
-            })
-            .finally(() => setLoading(false))
-    }, [])
+        axios.get<Person>(`http://localhost:8080/person/${personId}`).then((res) => {
+            setPerson({ ...res.data, birthDate: new Date(res.data.birthDate) })
+        })
+    }, [personId, navigate])
+
+    const openNotification = (message: string, type: 'warning' | 'info' | 'success' | 'error') => {
+        alertMessageSet(message)
+        alertTypeSet(type)
+        notificationOpenSet(true)
+    }
+
+    const closeSnackBar = () => {
+        alertTypeSet('info')
+        alertMessageSet('')
+        notificationOpenSet(false)
+    }
+
+    const setNewError = (field: 'name' | 'email' | 'birthDate' | 'ein' | 'contacts') => {
+        const aux = {
+            name: false,
+            email: false,
+            birthDate: false,
+            ein: false,
+            contacts: false,
+        }
+
+        if (errors[field] !== undefined) {
+            aux[field] = true
+            openNotification('Algum campo informado na pessoa está inválido! Ele foi marcado em vermelho!', 'error')
+        } else if (field.includes('contacts')) {
+            openNotification('Algum campo informado em algum contato está inválido! Os contatos foram marcados em vermelho!', 'error')
+            aux.contacts = true
+        }
+
+        setErrors(aux)
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPerson({ ...person, [e.target.name]: e.target.value })
@@ -59,6 +91,14 @@ export const Update: React.FC = () => {
 
     const handleDateChange = (value: Date | null) => {
         if (value) setPerson({ ...person, birthDate: value })
+    }
+
+    const handleCancelDelete = () => {
+        setOpenConfirmModal(false)
+    }
+
+    const handleConfirmDelete = () => {
+        handleDelete()
     }
 
     const handleContactChange = (contactIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,10 +125,28 @@ export const Update: React.FC = () => {
         setPerson(aux)
     }
 
-    const handleDelete = () => {}
+    const handleDelete = () => {
+        axios.delete<Person>(`http://localhost:8080/person/${personId}`).finally(() => {
+            handleGoToHome()
+        })
+    }
 
     const handleSave = () => {
-        navigate('/')
+        axios
+            .put<Person>(`http://localhost:8080/person`, person)
+            .then(() => {
+                handleGoToHome()
+            })
+            .catch((err) => {
+                const error = err as AxiosError<BadRequestResponse, BadRequestResponse>
+                if (!error.response) return
+
+                if (error.response.status === 400) {
+                    const response = error.response
+
+                    setNewError(response.data.field)
+                }
+            })
     }
 
     const handleGoToHome = () => {
@@ -151,7 +209,9 @@ export const Update: React.FC = () => {
                             },
                             gap: '5px',
                         }}
-                        onClick={handleDelete}
+                        onClick={() => {
+                            setOpenConfirmModal(true)
+                        }}
                     >
                         <RemoveIcon></RemoveIcon>
                         Excluir
@@ -186,6 +246,16 @@ export const Update: React.FC = () => {
                     handleDeleteContact={handleDeleteContact}
                 ></UpdatePersonForm>
             </Box>
+            <ConfirmModal
+                open={openConfirmModal}
+                setOpenConfirmModal={setOpenConfirmModal}
+                message="Tem certeza que deseja deletar esta pessoa?"
+                handleCancelDelete={handleCancelDelete}
+                handleConfirmDelete={handleConfirmDelete}
+            ></ConfirmModal>
+            <Snackbar open={notificationOpen} autoHideDuration={10000} onClose={closeSnackBar}>
+                <Alert severity={alertType}>{alertMessage}</Alert>
+            </Snackbar>
         </Box>
     )
 }

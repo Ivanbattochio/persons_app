@@ -12,7 +12,6 @@ type DateInputProps = {
 }
 
 export const FormDateInput: React.FC<DateInputProps> = ({ value, labelText, handleChange }) => {
-    console.log(value)
 
     return (
         <Box>

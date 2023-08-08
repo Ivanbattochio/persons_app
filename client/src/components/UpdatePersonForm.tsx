@@ -4,6 +4,7 @@ import { Box, Divider, IconButton, Tooltip } from '@mui/material'
 import { FormDateInput } from './FormDateInput'
 import { UpdateContactForm } from './UpdateContactForm'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+
 export const UpdatePersonForm: React.FC<UpdatePersonFormProps> = ({
     initialData,
     onChange,
@@ -11,14 +12,15 @@ export const UpdatePersonForm: React.FC<UpdatePersonFormProps> = ({
     handleContactChange,
     handleAddContact,
     handleDeleteContact,
+    errors,
 }) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingLeft: '20px', alignItems: 'center', width: '100%' }}>
-            <FormInput type="text" name="name" value={initialData.name} handleChange={onChange} labelText="Nome" error />
+            <FormInput type="text" name="name" value={initialData.name} handleChange={onChange} labelText="Nome" error={errors.name} />
             <Divider sx={{ width: '80%', alignSelf: 'center' }} />
-            <FormInput type="email" name="email" value={initialData.email} handleChange={onChange} labelText="Email" error />
+            <FormInput type="email" name="email" value={initialData.email} handleChange={onChange} labelText="Email" error={errors.email} />
             <Divider sx={{ width: '80%', alignSelf: 'center' }} />
-            <FormInput type="text" name="ein" value={initialData.ein} handleChange={onChange} labelText="CPF" error />
+            <FormInput type="text" name="ein" value={initialData.ein} handleChange={onChange} labelText="CPF" error={errors.ein} />
             <Divider sx={{ width: '80%', alignSelf: 'center' }} />
             <FormDateInput type="date" value={initialData.birthDate} handleChange={handleDateChange} labelText="Data de nascimento" />
             <Divider sx={{ width: '80%', alignSelf: 'center', borderBottomWidth: '3px', borderRadius: '3px' }} />
@@ -38,6 +40,7 @@ export const UpdatePersonForm: React.FC<UpdatePersonFormProps> = ({
                         initialData={contact}
                         handleContactChange={handleContactChange}
                         handleDeleteContact={handleDeleteContact}
+                        error={errors.contacts}
                     ></UpdateContactForm>
                 ))}
                 <Tooltip title="Adicionar novo contato" placement="right">

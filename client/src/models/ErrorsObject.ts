@@ -5,3 +5,9 @@ export type PersonErrorsObject = {
     ein: boolean
     contacts: boolean
 }
+
+export type BadRequestResponse = {
+    field: 'name' | 'email' | 'birthDate' | 'ein' | 'contacts'
+    message: string
+    statusCode: number
+}

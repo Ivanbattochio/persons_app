@@ -2,16 +2,16 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { FormInput } from './FormInput'
 import { Contact } from '../models/Contact'
 import RemoveIcon from '@mui/icons-material/Remove'
+
 type InputProps = {
     number: number
     initialData: Contact
     handleContactChange: (contactIndex: number, e: React.ChangeEvent<HTMLInputElement>) => void
     handleDeleteContact: (index: number) => void
+    error: boolean
 }
 
-export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, handleContactChange, handleDeleteContact }) => {
-    console.log({ initialData })
-
+export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, handleContactChange, handleDeleteContact, error }) => {
     return (
         <Box sx={{ paddingTop: '8px' }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', justifyContent: 'space-between', margin: '5px' }}>
@@ -38,7 +38,7 @@ export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, h
                     handleContactChange(number, e)
                 }}
                 labelText="Nome"
-                error
+                error={error}
             />
             <FormInput
                 type="email"
@@ -48,7 +48,7 @@ export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, h
                     handleContactChange(number, e)
                 }}
                 labelText="Email"
-                error
+                error={error}
             />
             <FormInput
                 type="tel"
@@ -58,7 +58,7 @@ export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, h
                     handleContactChange(number, e)
                 }}
                 labelText="Telefone"
-                error
+                error={error}
             />
         </Box>
     )
