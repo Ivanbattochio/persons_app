@@ -100,10 +100,8 @@ public class PersonControllerImpl implements PersonController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person not found!");
         }
 
-        PersonModel personModel = optionalPerson.get();
-        modelMapper.map(personDTO, personModel);
 
-        return ResponseEntity.status(HttpStatus.OK).body(convertToView(personService.updatePerson(personModel)));
+        return ResponseEntity.status(HttpStatus.OK).body(convertToView(personService.updatePerson(personDTO)));
     }
 
     private PersonView convertToView(PersonModel user) {

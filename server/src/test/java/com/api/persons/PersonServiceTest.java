@@ -2,6 +2,9 @@ package com.api.persons;
 
 import com.api.persons.dtos.CreateContactDTO;
 import com.api.persons.dtos.CreatePersonDTO;
+import com.api.persons.dtos.UpdateContactDTO;
+import com.api.persons.dtos.UpdatePersonDTO;
+import com.api.persons.models.ContactModel;
 import com.api.persons.models.PersonModel;
 import com.api.persons.services.PersonServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -34,6 +37,7 @@ public class PersonServiceTest {
     @BeforeEach
     public void beforeEach() {
         jdbcTemplate.execute("INSERT INTO tb_person (id, name, email, birth_date, ein) VALUES ('df031153-546a-4d31-a92c-c9d53a88056c', 'John Doe', 'ivan@outlook.com', '1990-01-01', '51326686828')");
+        jdbcTemplate.execute("INSERT INTO tb_contact (id,  email, name, phone_number, person_id) VALUES ('4fc84be1-2752-4d8b-97bb-805edc81a199', 'email@email.com', 'ivan', '14997893788', 'df031153-546a-4d31-a92c-c9d53a88056c')");
         jdbcTemplate.execute("INSERT INTO tb_person (id, name, email, birth_date, ein) VALUES ('df031153-546a-4d31-a92c-c9d53a88456c', 'John Doe', 'ivan123@outlook.com', '1990-01-01', '51326686828')");
     }
 
@@ -122,11 +126,29 @@ public class PersonServiceTest {
         PersonModel personModel = personService.findById(UUID.fromString("df031153-546a-4d31-a92c-c9d53a88056c")).orElse(null);
 
         assertNotNull(personModel, "person should be found");
+        UpdatePersonDTO updatePersonDTO = new UpdatePersonDTO();
 
+        updatePersonDTO.setId(personModel.getId());
+        updatePersonDTO.setName(personModel.getName());
+        updatePersonDTO.setEin(personModel.getEin());
+        updatePersonDTO.setEmail(personModel.getEmail());
+        updatePersonDTO.setBirthDate(personModel.getBirthDate());
 
-        personModel.setName("lucas");
+        List<UpdateContactDTO> updateContactDTOList = new ArrayList<>();
+        for (ContactModel contactDTO : personModel.getContacts()) {
+            UpdateContactDTO contactModel = new UpdateContactDTO();
+            contactModel.setId(contactDTO.getId());
+            contactModel.setEmail(contactDTO.getEmail());
+            contactModel.setName(contactDTO.getName());
+            contactModel.setPhoneNumber(contactDTO.getPhoneNumber());
+            updateContactDTOList.add(contactModel);
+        }
 
-        PersonModel updatedPerson = personService.updatePerson(personModel);
+        updatePersonDTO.setContacts(updateContactDTOList);
+
+        updatePersonDTO.setName("lucas");
+
+        PersonModel updatedPerson = personService.updatePerson(updatePersonDTO);
 
         String expectedNameAfterUpdate = "lucas";
 

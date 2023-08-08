@@ -2,6 +2,8 @@ package com.api.persons.services;
 
 import com.api.persons.dtos.CreateContactDTO;
 import com.api.persons.dtos.CreatePersonDTO;
+import com.api.persons.dtos.UpdateContactDTO;
+import com.api.persons.dtos.UpdatePersonDTO;
 import com.api.persons.models.ContactModel;
 import com.api.persons.models.PersonModel;
 import com.api.persons.repositories.PersonRepository;
@@ -69,8 +71,26 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonModel updatePerson(PersonModel person) {
-        return personRepository.save(person);
+    public PersonModel updatePerson(UpdatePersonDTO person) {
+        PersonModel personModel = new PersonModel();
+        BeanUtils.copyProperties(person, personModel);
+
+        List<UpdateContactDTO> contactDTOList = person.getContacts();
+        List<ContactModel> contactModelList = new ArrayList<>();
+
+        for (UpdateContactDTO contactDTO : contactDTOList) {
+            ContactModel contactModel = new ContactModel();
+            contactModel.setId(contactDTO.getId());
+            contactModel.setEmail(contactDTO.getEmail());
+            contactModel.setName(contactDTO.getName());
+            contactModel.setPhoneNumber(contactDTO.getPhoneNumber());
+            contactModel.setPerson(personModel);
+            contactModelList.add(contactModel);
+        }
+
+        personModel.setContacts(contactModelList);
+
+        return personRepository.save(personModel);
     }
 
     @Override

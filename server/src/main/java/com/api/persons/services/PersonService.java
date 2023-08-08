@@ -1,6 +1,7 @@
 package com.api.persons.services;
 
 import com.api.persons.dtos.CreatePersonDTO;
+import com.api.persons.dtos.UpdatePersonDTO;
 import com.api.persons.models.PersonModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -23,7 +24,7 @@ public interface PersonService {
 
     List<PersonModel> findAll();
 
-    PersonModel updatePerson(PersonModel person);
+    PersonModel updatePerson(UpdatePersonDTO person);
 
     Page<PersonModel> findPaginated(Integer page, Integer size, Sort sort);
 
