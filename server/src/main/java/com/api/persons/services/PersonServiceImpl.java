@@ -26,8 +26,6 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public PersonModel createPerson(CreatePersonDTO person) {

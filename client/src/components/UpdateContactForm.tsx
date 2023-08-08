@@ -2,6 +2,8 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { FormInput } from './FormInput'
 import { Contact } from '../models/Contact'
 import RemoveIcon from '@mui/icons-material/Remove'
+import { ConfirmModal } from './ConfirmModal'
+import { useState } from 'react'
 
 type InputProps = {
     number: number
@@ -12,6 +14,16 @@ type InputProps = {
 }
 
 export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, handleContactChange, handleDeleteContact, error }) => {
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
+
+    const handleCancelDelete = () => {
+        setOpenConfirmModal(false)
+    }
+
+    const handleConfirmDelete = () => {
+        handleDeleteContact(number)
+    }
+
     return (
         <Box sx={{ paddingTop: '8px' }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', justifyContent: 'space-between', margin: '5px' }}>
@@ -21,7 +33,11 @@ export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, h
                         <IconButton
                             sx={{ backgroundColor: '#9D5C63', color: '#fff', width: '20px', height: '20px', ':hover': { backgroundColor: '#9D5C63' } }}
                             onClick={() => {
-                                handleDeleteContact(number)
+                                if (!initialData.id.length) {
+                                    handleDeleteContact(number)
+                                    return
+                                }
+                                setOpenConfirmModal(true)
                             }}
                             disabled={!number}
                         >
@@ -60,6 +76,13 @@ export const UpdateContactForm: React.FC<InputProps> = ({ number, initialData, h
                 labelText="Telefone"
                 error={error}
             />
+            <ConfirmModal
+                open={openConfirmModal}
+                setOpenConfirmModal={setOpenConfirmModal}
+                message="Tem certeza que excluir este contato? Este é um processo sem volta!"
+                handleCancelDelete={handleCancelDelete}
+                handleConfirmDelete={handleConfirmDelete}
+            ></ConfirmModal>
         </Box>
     )
 }

@@ -121,8 +121,24 @@ export const Update: React.FC = () => {
 
     const handleDeleteContact = (index: number) => {
         const aux = { ...person }
-        aux.contacts.splice(index, 1)
-        setPerson(aux)
+        const contactToDelete = aux.contacts[index]
+
+        if (!contactToDelete.id.length) {
+            aux.contacts.splice(index, 1)
+            setPerson(aux)
+            return
+        }
+
+        axios
+            .delete(`http://localhost:8080/contact/${contactToDelete.id}`)
+            .then(() => {
+                aux.contacts.splice(index, 1)
+                setPerson(aux)
+            })
+            .catch(() => {
+                alertMessageSet('Algo de errado aconteceu ao tentar excluir o contato!')
+                notificationOpenSet(true)
+            })
     }
 
     const handleDelete = () => {
