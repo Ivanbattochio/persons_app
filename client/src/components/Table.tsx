@@ -22,6 +22,9 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import CheckIcon from '@mui/icons-material/Check'
 import { TableProps } from '../models/TableComponent'
 import { Link, useNavigate } from 'react-router-dom'
+import { ConfirmModal } from './ConfirmModal'
+import { useState } from 'react'
+
 const cardsQtyOptions = [
     { key: '5', value: '5', text: '5' },
     { key: '10', value: '10', text: '10' },
@@ -49,6 +52,23 @@ export const TableComponent: React.FC<TableProps> = ({
 
     const handleUpdate = (id: string) => {
         navigate('/update', { state: { id: id } })
+    }
+
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
+
+    const handleCancelDelete = () => {
+        setOpenConfirmModal(false)
+    }
+
+    const handleConfirmDelete = () => {
+        handleDelete()
+    }
+
+    const getSelectedRowsNumber = () => {
+        return tableData.reduce((acc, current) => {
+            current.selected ? acc++ : acc
+            return acc
+        }, 0)
     }
 
     return (
@@ -87,7 +107,9 @@ export const TableComponent: React.FC<TableProps> = ({
                             gap: '5px',
                         }}
                         disabled={!isDeleteButtonActive}
-                        onClick={handleDelete}
+                        onClick={() => {
+                            setOpenConfirmModal(true)
+                        }}
                     >
                         <RemoveIcon></RemoveIcon>
                         Excluir
@@ -195,13 +217,13 @@ export const TableComponent: React.FC<TableProps> = ({
                 <ToggleButtonGroup
                     value={currentCardQuantity}
                     exclusive
-                    onChange={(e: React.MouseEvent<HTMLElement>, val: string) => {
+                    onChange={(_: React.MouseEvent<HTMLElement>, val: string) => {
                         handleSizeChange(parseInt(val))
                     }}
                     sx={{ marginRight: '20px' }}
                 >
                     {cardsQtyOptions.map(({ key, value }) => (
-                        <ToggleButton disabled={loading} value={value} key={key} name={value} onChange={(e, val) => handleSizeChange(val)}>
+                        <ToggleButton disabled={loading} value={value} key={key} name={value} onChange={(_, val) => handleSizeChange(val)}>
                             {value}
                         </ToggleButton>
                     ))}
@@ -212,10 +234,17 @@ export const TableComponent: React.FC<TableProps> = ({
                     shape="rounded"
                     page={currentPage}
                     count={Math.ceil(totalQty / currentCardQuantity)}
-                    onChange={(e, page) => {
+                    onChange={(_, page) => {
                         handlePageChange(page)
                     }}
                 />
+                <ConfirmModal
+                    open={openConfirmModal}
+                    setOpenConfirmModal={setOpenConfirmModal}
+                    message={`Tem certeza que deseja excluir ${getSelectedRowsNumber()} pessoa(s)?`}
+                    handleCancelDelete={handleCancelDelete}
+                    handleConfirmDelete={handleConfirmDelete}
+                ></ConfirmModal>
             </Box>
         </>
     )

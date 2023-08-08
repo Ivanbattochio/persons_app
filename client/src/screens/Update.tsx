@@ -249,7 +249,7 @@ export const Update: React.FC = () => {
             <ConfirmModal
                 open={openConfirmModal}
                 setOpenConfirmModal={setOpenConfirmModal}
-                message="Tem certeza que deseja deletar esta pessoa?"
+                message="Tem certeza que deseja excluir esta pessoa?"
                 handleCancelDelete={handleCancelDelete}
                 handleConfirmDelete={handleConfirmDelete}
             ></ConfirmModal>
