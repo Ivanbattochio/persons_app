@@ -1,4 +1,5 @@
 import { Contact } from './Contact'
+import { PersonErrorsObject } from './ErrorsObject'
 
 export type Person = {
     id: string
@@ -16,4 +17,14 @@ export type PersonRow = {
     birthDate: Date
     ein: string
     selected: boolean
+}
+export type UpdatePersonFormProps = {
+    initialData: Person
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handleDateChange: (value: Date | null) => void
+    errors: PersonErrorsObject
+    setErrors: React.Dispatch<React.SetStateAction<PersonErrorsObject>>
+    handleContactChange: (contactIndex: number, e: React.ChangeEvent<HTMLInputElement>) => void
+    handleAddContact: () => void
+    handleDeleteContact: (index: number) => void
 }

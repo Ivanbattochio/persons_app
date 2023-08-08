@@ -1,10 +1,9 @@
 import { TableComponent } from '../components/Table'
-import { InsertPersonProps } from '../models/InsertPersonComponent'
 import { Box } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
 import axios from 'axios'
 import { Person, PersonRow } from '../models/Person'
-export const Home: React.FC<InsertPersonProps> = () => {
+export const Home: React.FC = () => {
     const [loading, setLoading] = useState(false)
     const [tableData, setTableData] = useState<PersonRow[]>([])
 

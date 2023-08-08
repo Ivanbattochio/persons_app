@@ -65,7 +65,7 @@ export const TableComponent: React.FC<TableProps> = ({
                     justifyContent: 'space-between',
                 }}
             >
-                <Typography sx={{ alignSelf: 'center', color: 'black', padding: '50px', fontFamily: 'sans-serif' }} variant="h3">
+                <Typography sx={{ alignSelf: 'center', color: 'black', padding: '50px', fontFamily: 'sans-serif' }} variant="h4">
                     Pessoas
                 </Typography>
                 <Box
