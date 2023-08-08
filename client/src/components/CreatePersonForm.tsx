@@ -1,11 +1,11 @@
-import { UpdatePersonFormProps } from '../models/Person'
+import { CreatePersonFormProps } from '../models/Person'
 import { FormInput } from './FormInput'
 import { Box, Divider, IconButton, Tooltip } from '@mui/material'
 import { FormDateInput } from './FormDateInput'
-import { UpdateContactForm } from './UpdateContactForm'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { CreateContactForm } from './CreateContactform'
 
-export const UpdatePersonForm: React.FC<UpdatePersonFormProps> = ({
+export const CreatePersonForm: React.FC<CreatePersonFormProps> = ({
     initialData,
     onChange,
     handleDateChange,
@@ -35,13 +35,13 @@ export const UpdatePersonForm: React.FC<UpdatePersonFormProps> = ({
                 }}
             >
                 {initialData.contacts.map((contact, index) => (
-                    <UpdateContactForm
+                    <CreateContactForm
                         number={index}
                         initialData={contact}
                         handleContactChange={handleContactChange}
                         handleDeleteContact={handleDeleteContact}
                         error={errors.contacts}
-                    ></UpdateContactForm>
+                    ></CreateContactForm>
                 ))}
                 <Tooltip title="Adicionar novo contato" placement="right">
                     <IconButton
